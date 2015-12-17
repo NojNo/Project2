@@ -19,7 +19,7 @@ DROP TABLE IF EXISTS players;
 create TABLE players(player_id SERIAL NOT NULL PRIMARY KEY, name TEXT);
 -- first check if Players exists, if so, it will be dropped. If not: CREATE TABLE
 DROP TABLE IF EXISTS matches;
-create TABLE matches(winner INTEGER REFERENCES players(player_id), loser INTEGER REFERENCES players(player_id), match_id SERIAL NOT NULL Primary KEY);
+create TABLE matches(winner INTEGER REFERENCES (players.player_id), loser INTEGER REFERENCES (players.player_id), match_id SERIAL NOT NULL Primary KEY);
 -- first check if Matches exists, if so, it will be dropped. If not: CREATE TABLE
 create VIEW number_of_wins AS select players.player_id, players.name, count(matches.winner) AS wins FROM players left join matches on players.player_id = matches.winner group by players.player_id;
 
