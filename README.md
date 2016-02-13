@@ -31,7 +31,7 @@ What's included
 
 Within the download you will find the following directories and files:
 
-tournament/
+Project2/
 ├── tournament_test.py
 ├── tournament.sql
 └── tournament.py
