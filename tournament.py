@@ -1,15 +1,18 @@
-# !/usr/bin/env python
+# -*- coding: cp1252 -*-
 
+# !/usr/bin/env python
 # tournament.py -- implementation of a Swiss-system tournament
 
 
 import psycopg2
 import tournament
+# import the database file from local machine and the PostgreSQL database
 
 
 def connect():
     """Connect to the PostgreSQL database.  Returns a database connection."""
     return psycopg2.connect("dbname=tournament")
+    
 
 
 def deleteMatches():
@@ -19,6 +22,7 @@ def deleteMatches():
     c.execute('DELETE FROM matches')
     conn.commit()
     conn.close()
+
 
 
 def deletePlayers():
@@ -34,15 +38,13 @@ def countPlayers():
     """Returns the number of players currently registered."""
     conn = psycopg2.connect("dbname=tournament")
     c = conn.cursor()
-    c.execute('select count(*) from players')
+    c.execute('SELECT COUNT(*) FROM players')
     # always keep select and fetch together
     count = c.fetchall()
-    # fetachall returns a list of my reults
+    # fetachall returns a list of my results
     conn.close()
     return count[0][0]
-    # keep in mind to put the return statement after
-    # close so that the function is finished
-    # returns the count in an array and as an integer -> i dont get it
+    # return is always after close so that the function is finished
 
 
 def registerPlayer(name):
@@ -54,7 +56,7 @@ def registerPlayer(name):
     """
     conn = psycopg2.connect("dbname=tournament")
     c = conn.cursor()
-    c.execute('INSERT INTO players(name) values (%s)', (name,))
+    c.execute('INSERT INTO players(name) VALUES (%s)', (name,))
     conn.commit()
     conn.close()
 
@@ -74,11 +76,10 @@ def playerStandings():
     """
     conn = psycopg2.connect("dbname=tournament")
     c = conn.cursor()
-    c.execute('select * from standings')
-    # always keep select and fetch together
+    c.execute('SELECT * FROM standings')
     count = c.fetchall()
-    # fetachall returns a list of my reults
     conn.close()
+    return count
 
 
 def reportMatch(winner, loser):
@@ -87,11 +88,16 @@ def reportMatch(winner, loser):
       winner:  the id number of the player who won
       loser:  the id number of the player who lost
     """
+    participant = [winner, loser]
+    conn = psycopg2.connect("dbname=tournament")
+    c = conn.cursor()
+    c.execute('INSERT INTO matches VALUES (%s, %s);', (winner, loser))
+    conn.commit()
+    conn.close()
 
 
 def swissPairings():
     """Returns a list of pairs of players for the next round of a match.
-
     Assuming that there are an even number of players registered, each player
     appears exactly once in the pairings.  Each player is paired with another
     player with an equal or nearly-equal win record, that is, a player adjacent
@@ -104,3 +110,11 @@ def swissPairings():
         id2: the second player's unique id
         name2: the second player's name
     """
+    conn = psycopg2.connect("dbname=tournament")
+    c = conn.cursor()
+    c.execute('SELECT a.player_id, a.name, b.player_id , b.name FROM \
+    standings a, standings b WHERE a.wins = b.wins AND a.player_id < \
+    b.player_id')
+    count = c.fetchall()
+    conn.close()
+    return count
