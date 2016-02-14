@@ -21,8 +21,10 @@ the program is written in Python 2.7 on a Windows machine. The whole code was ex
 
 Quick Start:
 
-In order to run the program you need be in the right directory in Vagrant.
-Then you can just type python tournament_test.py which will automatically execute the code.
+In order to run the program you need to be in the right directory in Vagrant. 
+At this point you have the following 2 ways of using these files: 
+Firstly, you could type psql in Vagrant in order to write in PostgreSQL and then do \i tournament.sql which will import the database scheme. From now on you can use (or apply select, update, insert, delete to) the database scheme independently from the Python files.
+Secondly, you can just type python tournament_test.py which will automatically set up a database scheme for you and then execute the Python code which will use this database scheme. 
 
 So what do you need to run the programm? 
 You need to set up Python + Vagrant Virtual Machine. For testing/customizing the code it might be helpful to use the psql command line interface. 
