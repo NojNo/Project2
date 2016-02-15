@@ -75,3 +75,24 @@ CREATE view standings AS
 -- this time the join condition is based on the player_ids
 -- As we need to have the player listed in descending order, 
 -- we add the order by keyword
+CREATE VIEW evenRows AS (
+    SELECT row_number()over(ORDER BY s1.wins DESC) AS i, s1.player_id, s1.name, s1.wins
+    FROM (SELECT row_number()OVER(ORDER BY wins DESC) AS  position, *
+    FROM standings) AS s1
+    WHERE mod(position, 2) = 0
+    );
+ -- this code will select the player_id, name, wins from all the even rows from wins;
+
+CREATE VIEW oddRows AS (
+  SELECT row_number()over(ORDER BY s1.wins DESC) AS i, s1.player_id, s1.name, s1.wins
+  FROM (SELECT row_number()OVER(ORDER BY wins DESC) AS  position, *
+    FROM standings) AS s1
+    WHERE mod(position, 2) != 0
+    );
+ -- this code will select the player_id, name, wins from all the odd rows from wins;
+
+CREATE VIEW nextRounds_match AS SELECT s1.player_id AS player1_id, s1.name AS player1_Name, 
+	s2.player_id AS player2_id , s2.name AS player2_name 
+	FROM evenRows as s1, oddRows as s2 
+	WHERE s1.wins = s2.wins;
+-- this code joins odd and even rows on the number of wins. 
