@@ -112,8 +112,7 @@ def swissPairings():
     """
     conn = psycopg2.connect("dbname=tournament")
     c = conn.cursor()
-    c.execute('SELECT a.player_id, a.name, b.player_id , b.name FROM \
-    standings a, standings b WHERE a.player_id < b.player_id')
+    c.execute('SELECT * FROM nextRounds_match')
     count = c.fetchall()
     conn.close()
     return count
