@@ -1,4 +1,4 @@
-Swiss Pairing Version 1.0 created on 13.02.2016
+Swiss Pairing Version 1.2 created on 24.02.2016
 
 
 General Usage:
